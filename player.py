@@ -3,12 +3,12 @@
 import pygame
 
 class Player:
-    def __init__(self, width, height):
+    def __init__(self, pos_x, pos_y):
         self.color = (255, 255, 255)
-        self.width = width
-        self.height = height
-        self.x = 0
-        self.y = 0
+        self.width = 20
+        self.height = 20
+        self.x = pos_x
+        self.y = pos_y
         self.velocity_x = 0
         self.velocity_y = 0
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)

@@ -13,6 +13,12 @@ from titlescreen import TitleScreen
 WIDTH, HEIGHT = 800, 400
 BLACK = (0, 0, 0)
 CAMERA_THRESHOLD = 200
+GAME_START_VARS = {
+    "player_x": 200,
+    "player_y": 200,
+    "enemy_x": 500,
+    "enemy_y": 200
+}
 
 # Initialize pygame
 pygame.init()
@@ -21,9 +27,14 @@ clock = pygame.time.Clock()
 
 # Create a title screen instance
 title_screen = TitleScreen()
-
+   
 # Create player, platforms, and enemy
-player = Player(20, 20)
+def create_player():
+    return Player(GAME_START_VARS["player_x"], GAME_START_VARS["player_y"])
+def create_enemy():
+    return Enemy(GAME_START_VARS["enemy_x"], GAME_START_VARS["enemy_y"], 20, 20)
+player = create_player()
+enemy = create_enemy()
 platforms = [
     Platform(200, 200, 100, 10),
     Platform(300, 300, 100, 10),
@@ -32,7 +43,6 @@ platforms = [
     Platform(700, 150, 100, 10),
     Platform(800, 100, 100, 10),  # Checkpoint platform
 ]
-enemy = Enemy(600, 100, 20, 20)
 
 # Create a menu instance
 menu = Menu(WIDTH, HEIGHT)
@@ -96,17 +106,22 @@ while running:
                 text = font.render("You reached the checkpoint! Game finished!", True, (255, 255, 255))
                 screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - text.get_height() // 2))
             elif game_over:
-                game_over_screen.draw(screen)
+                player = create_player()
+                enemy = create_enemy()
+                game_started = False
+                game_over = False
         else:
             menu.draw(screen)
             menu_action = menu.handle_event(event)
             if menu_action == "Resume":
                 game_paused = False
-            elif menu_action == "Main Menu":
+            elif menu_action == "Restart":
                 # Reset game state when returning to main menu
+                player = create_player()
+                enemy = create_enemy()
                 game_started = False
                 game_paused = False
-                game_over = False
+                game_over = False         
             elif menu_action == "Quit":
                 running = False
     else:  # Show the title screen if the game hasn't started or if returning from game over

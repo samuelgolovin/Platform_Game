@@ -8,8 +8,9 @@ class Menu:
         self.height = height
         self.screen = pygame.Surface((width, height))
         self.font = pygame.font.Font(None, 36)
-        self.menu_items = ["Resume (P)", "Main Menu (M)", "Quit (Q)"]
+        self.menu_items = ["Resume (P)", "Restart (R)", "Quit (Q)"]
         self.selected_item = 0
+        self.prev_key = None
 
     def draw(self, surface):
         self.screen.fill((0, 0, 0))
@@ -22,15 +23,17 @@ class Menu:
 
     def handle_event(self, event):
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP:
-                self.selected_item = (self.selected_item - 1) % len(self.menu_items)
-            elif event.key == pygame.K_DOWN:
-                self.selected_item = (self.selected_item + 1) % len(self.menu_items)
-            elif event.key == pygame.K_RETURN:
-                if self.selected_item == 0:
-                    return "Resume"
-                elif self.selected_item == 1:
-                    return "Main Menu"
-                elif self.selected_item == 2:
-                    return "Quit"
+            if event.key != self.prev_key:
+                if event.key == pygame.K_UP:
+                    self.selected_item = (self.selected_item - 1) % len(self.menu_items)
+                elif event.key == pygame.K_DOWN:
+                    self.selected_item = (self.selected_item + 1) % len(self.menu_items)
+                elif event.key == pygame.K_RETURN:
+                    if self.selected_item == 0:
+                        return "Resume"
+                    elif self.selected_item == 1:
+                        return "Restart"
+                    elif self.selected_item == 2:
+                        return "Quit"
+                self.prev_key = event.key
         return None
