@@ -3,6 +3,8 @@ import sys
 from level01_player import Player
 from level01_enemy import Enemy
 from level01_platform import Platform
+from level01_titlescreen import TitleScreen
+from level01_game_over import GameOver
 
 pygame.init()
 
@@ -24,6 +26,9 @@ GAME_VARS = {
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 clock = pygame.time.Clock()
 
+titlescreen = TitleScreen()
+gameoverscreen = GameOver(WIDTH, HEIGHT)
+
 def create_player():
     return Player(GAME_VARS["player_x"], GAME_VARS["player_y"], PINK)
 def create_enemy():
@@ -42,19 +47,35 @@ platforms = [
 ]
 
 running = True
-game_started = True
+game_started = False
+game_over = False
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-    if game_started:
+    if game_over:
+        gameoverscreen.draw(screen)
+        # take game to titlescreen
+        if event.type == pygame.KEYUP and event.key == pygame.K_RETURN:
+            player = create_player()
+            enemy = create_enemy()
+            game_over = False
+            titlescreen.draw(screen)
+            # Start the game when Enter is pressed
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                game_started = True
+
+    elif game_started:
         if player.x < 800:
             camera_offset = max(0, player.x - WIDTH // 2) if player.distance_traveled > CAMERA_THRESHOLD else 0
         else: camera_offset = 400
         #update things
         player.update()
         enemy.update()
+        if enemy.check_collision(player.rect):
+                game_over = True
+                game_started = False
         for platform in platforms:
                 if player.rect.colliderect(platform.rect):
                     if player.velocity_y > 0:
@@ -78,7 +99,12 @@ while running:
         pygame.draw.rect(screen, LIGHT_GREEN, (0, 300, WIDTH, HEIGHT))
         enemy.draw(screen, camera_offset)
         player.draw(screen, camera_offset)
-
+    # titlescreen
+    else:
+        titlescreen.draw(screen)
+        # Start the game when Enter is pressed
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+            game_started = True
     pygame.display.flip()
     clock.tick(60)
 

@@ -7,7 +7,7 @@ class Enemy:
         self.height = 20
         self.x = pos_x
         self.y = pos_y
-        self.velocity_x = 1
+        self.velocity_x = -1
         self.velocity_y = 0
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.on_platform = False
