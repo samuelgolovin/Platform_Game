@@ -1,10 +1,12 @@
 import pygame
 import sys
+import random
 from level01_player import Player
 from level01_enemy import Enemy
 from level01_platform import Platform
 from level01_titlescreen import TitleScreen
 from level01_game_over import GameOver
+from level01_particles import Particle
 
 pygame.init()
 
@@ -36,6 +38,18 @@ def create_enemy():
 
 player = create_player()
 enemy = create_enemy()
+
+# Create a list to store particles
+particles = []
+# Create particles and add them to the list
+for _ in range(20):
+    position = [player.x + player.width / 2, player.y + player.height / 2]
+    velocity = [random.uniform(-1, 1), random.uniform(-1, 1)]
+    color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), 255)
+    size = random.uniform(5, 10)
+    lifespan = random.randint(30, 60)
+    particle = Particle(position, velocity, color, size, lifespan)
+    particles.append(particle)
 
 platforms = [
     Platform(150, 200, 100, 10),
@@ -72,7 +86,11 @@ while running:
         else: camera_offset = 400
         #update things
         player.update()
-        enemy.update()
+        enemy.update(player.x)
+        # Update particles
+        for particle in particles:
+            particle.update(player.x + player.width / 2, player.y + player.height / 2)
+
         if enemy.check_collision(player.rect):
                 game_over = True
                 game_started = False
@@ -97,8 +115,12 @@ while running:
         for platform in platforms:
             platform.draw(screen, camera_offset)
         pygame.draw.rect(screen, LIGHT_GREEN, (0, 300, WIDTH, HEIGHT))
+        # Draw particles
+        for particle in particles:
+            particle.draw(screen, camera_offset)
         enemy.draw(screen, camera_offset)
         player.draw(screen, camera_offset)
+
     # titlescreen
     else:
         titlescreen.draw(screen)

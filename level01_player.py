@@ -11,6 +11,8 @@ class Player:
         self.y = pos_y
         self.velocity_x = 0
         self.velocity_y = 0
+        self.top_speed = 5
+        self.acceleration = 0.2
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.on_platform = False
         self.checkpoint_reached = False
@@ -21,11 +23,11 @@ class Player:
         if keys[pygame.K_SPACE] and self.on_platform:
             self.velocity_y = -10
         if keys[pygame.K_RIGHT]:
-            if self.velocity_x < 5:
-                self.velocity_x += 0.2
+            if self.velocity_x < self.top_speed:
+                self.velocity_x += self.acceleration
         elif keys[pygame.K_LEFT]:
-            if self.velocity_x > -5:
-                self.velocity_x -= 0.2
+            if self.velocity_x > -self.top_speed:
+                self.velocity_x -= self.acceleration
         else:
             self.velocity_x *= 0.9
         if self.x <= 0:
