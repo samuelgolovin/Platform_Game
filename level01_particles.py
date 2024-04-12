@@ -22,9 +22,9 @@ class Particle:
         if self.age >= self.lifespan:
             self.position = [x, y]
             self.velocity = [random.uniform(-1, 1), random.uniform(-1, 1)]
-            self.color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), 255)
-            self.size = random.uniform(5, 10)
-            self.lifespan = random.randint(30, 60)
+            self.color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255), 255)
+            self.size = random.uniform(5, 8)
+            self.lifespan = random.randint(20, 30)
             self.age = 0
 
         # Shrink particle size over time

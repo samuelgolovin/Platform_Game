@@ -1,14 +1,14 @@
 import pygame
 import random
 class Enemy:
-    def __init__(self, pos_x, pos_y, width, height):
-        self.color = (255, 0, 0)  # Red color for enemy
-        self.width = 20
-        self.height = 20
+    def __init__(self, pos_x, pos_y, color, width, height):
+        self.color = color
+        self.width = width
+        self.height = height
         self.x = pos_x
         self.y = pos_y
-        self.top_speed = 3
-        self.acceleration = 0.1
+        self.top_speed = 2.5
+        self.acceleration = 0.2
         self.velocity_x = 0
         self.velocity_y = 0
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)

@@ -49,7 +49,7 @@ class Player:
         self.x += self.velocity_x
 
     def draw(self, surface, camera_offset):
-        pygame.draw.rect(surface, self.color, (self.x - camera_offset, self.y, self.width, self.height), 4)
+        pygame.draw.rect(surface, self.color, (self.x - camera_offset, self.y, self.width, self.height))
 
     def update(self):
         self.player_input()

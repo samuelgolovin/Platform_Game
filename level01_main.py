@@ -11,18 +11,24 @@ from level01_particles import Particle
 pygame.init()
 
 WIDTH, HEIGHT = 800, 400
+
 BLACK = (0, 0, 0)
 LIGHT_BLUE = (137, 207, 240)
 LIGHT_GREEN = (190, 204, 154)
 PINK = (246, 180, 199)
+YELLOW = (255, 175, 69)
+ORANGE = (251, 109, 72)
+DARK_PINK = (215, 75, 118)
+PURPLE = (103, 63, 105)
+
 CAMERA_THRESHOLD = 200
 GAME_VARS = {
     "player_x": 200,
     "player_y": 200,
     "enemy_x": 500,
     "enemy_y": 200,
-    "enemy_x_size": 30,
-    "enemy_y_size": 30,
+    "enemy_x_size": 20,
+    "enemy_y_size": 20,
 }
 
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -32,9 +38,9 @@ titlescreen = TitleScreen()
 gameoverscreen = GameOver(WIDTH, HEIGHT)
 
 def create_player():
-    return Player(GAME_VARS["player_x"], GAME_VARS["player_y"], PINK)
+    return Player(GAME_VARS["player_x"], GAME_VARS["player_y"], YELLOW)
 def create_enemy():
-    return Enemy(GAME_VARS["enemy_x"], GAME_VARS["enemy_y"], GAME_VARS["enemy_x_size"], GAME_VARS["enemy_y_size"])
+    return Enemy(GAME_VARS["enemy_x"], GAME_VARS["enemy_y"], DARK_PINK, GAME_VARS["enemy_x_size"], GAME_VARS["enemy_y_size"])
 
 player = create_player()
 enemy = create_enemy()
@@ -45,9 +51,9 @@ particles = []
 for _ in range(20):
     position = [player.x + player.width / 2, player.y + player.height / 2]
     velocity = [random.uniform(-1, 1), random.uniform(-1, 1)]
-    color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255), 255)
-    size = random.uniform(5, 10)
-    lifespan = random.randint(30, 60)
+    color = (random.randint(100, 255), random.randint(100, 255), random.randint(100, 255), 255)
+    size = random.uniform(5, 8)
+    lifespan = random.randint(20, 30)
     particle = Particle(position, velocity, color, size, lifespan)
     particles.append(particle)
 
@@ -111,10 +117,10 @@ while running:
                     if platform == platforms[-1]:
                         enemy.checkpoint_reached = True
         #draw the things
-        screen.fill(LIGHT_BLUE)
+        screen.fill(ORANGE)
         for platform in platforms:
             platform.draw(screen, camera_offset)
-        pygame.draw.rect(screen, LIGHT_GREEN, (0, 300, WIDTH, HEIGHT))
+        pygame.draw.rect(screen, PURPLE, (0, 300, WIDTH, HEIGHT))
         # Draw particles
         for particle in particles:
             particle.draw(screen, camera_offset)
